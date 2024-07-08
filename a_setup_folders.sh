@@ -14,7 +14,7 @@
 CONFIG_BASE_PATH="ConfigFiles"
 
 # Define the default workarea name (configurable)
-DEFAULT_WORKAREA_NAME="hzmmymm"
+DEFAULT_WORKAREA_NAME="hzeeymm"
 
 # Check if Y2S directory and config folder name are provided as arguments
 if [ $# -ne 2 ]; then
