@@ -18,11 +18,13 @@ execute_step() {
     local current_dir=$(pwd)
 
     # Pick the CMSSW version based on the step
-    if [ "$step" == "HLT" ]; then
-        local cmssw_version="CMSSW_10_2_16_UL"
-    else
-        local cmssw_version="CMSSW_10_6_20"
-    fi
+    # if [ "$step" == "HLT" ]; then
+    #     local cmssw_version="CMSSW_10_2_16_UL"
+    # else
+    #     local cmssw_version="CMSSW_10_6_20"
+    # fi
+    
+    local cmssw_version="CMSSW_12_4_14_patch3"
 
     # Verify CMSSW environment
     source verify_cmssw.sh
@@ -51,19 +53,16 @@ execute_step() {
             # Execute different commands based on the step
             if [ "$step" == "SIM" ]; then
                 echo "Working in $(pwd)"
-                nohup cmsRun SIM_2018_cfg.py >> output2.log 2>&1 &
-            elif [ "$step" == "DIGI" ]; then
-                echo "Working in $(pwd)"
-                nohup cmsRun DIGIPremix_2018_cfg.py >> output3.log 2>&1 &
+                nohup cmsRun SIM_2022_cfg.py >> output2.log 2>&1 &
             elif [ "$step" == "HLT" ]; then
                 echo "Working in $(pwd)"
-                nohup cmsRun HLT_2018_cfg.py >> output4.log 2>&1 &
+                nohup cmsRun HLT_2022_cfg.py >> output5.log 2>&1 &
             elif [ "$step" == "RECO" ]; then
                 echo "Working in $(pwd)"
-                nohup cmsRun RECO_2018_cfg.py >> output5.log 2>&1 &
+                nohup cmsRun RECO_2022_cfg.py >> output6.log 2>&1 &
             elif [ "$step" == "MiniAOD" ]; then
                 echo "Working in $(pwd)"
-                nohup cmsRun MINIAOD_2018_cfg.py >> output6.log 2>&1 &
+                nohup cmsRun MINIAOD_2022_cfg.py >> output7.log 2>&1 &
             else
                 echo "Error: Unknown step '$step'."
                 exit 1
@@ -91,7 +90,6 @@ BASE_FOLDER="$1"
 SUB_FOLDER_PATTERN="$2"
 
 execute_step "SIM"
-execute_step "DIGI"
 execute_step "HLT"
 execute_step "RECO"
 execute_step "MiniAOD"
