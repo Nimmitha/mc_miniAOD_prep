@@ -89,7 +89,7 @@ fi
 BASE_FOLDER="$1"
 SUB_FOLDER_PATTERN="$2"
 
-execute_step "SIM"
+# execute_step "SIM"
 execute_step "HLT"
 execute_step "RECO"
 execute_step "MiniAOD"
