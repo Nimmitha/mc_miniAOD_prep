@@ -23,6 +23,8 @@ execute_step() {
     else
         local cmssw_version="CMSSW_10_6_20"
     fi
+    
+    # local cmssw_version="CMSSW_12_4_14_patch3"
 
     # Verify CMSSW environment
     source verify_cmssw.sh

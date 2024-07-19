@@ -5,14 +5,16 @@
 ##          Date: 05/08/2024                      ##
 ####################################################
 
-# This script takes the files inside the GEN in a given input directory.
-# Then it creates directories/workspaces for each file at ../ level
-# and copy the files to correponding directories
+# This script creates directories/workspaces at ../ level
+# If GEN directory is not empty, it copies files from GEN to corresponding directories
 # Generic config files are then copied from the provided config folder
 # Ex: ./setup_folder.sh Y2S 2018MC
 
 # Define the base path of the config directory
 CONFIG_BASE_PATH="ConfigFiles"
+
+# Define the default workarea name (configurable)
+DEFAULT_WORKAREA_NAME="hzmmjpsimm"
 
 # Check if Y2S directory and config folder name are provided as arguments
 if [ $# -ne 2 ]; then
@@ -36,24 +38,47 @@ echo "Navigating to GEN directory inside $1..."
 # Navigate to the GEN directory inside Y2S
 cd "$1/GEN" || { echo "Error: Could not navigate to '$1/GEN'."; exit 1; }
 
-# Loop through each root file
-for file in *.root; do
-    # Get the file name without extension
-    folder_name="${file%.root}"
-
-    # Create folder at Y2S level if it doesn't exist
-    if [ ! -d "../$folder_name" ]; then
-        echo "Creating folder '../$folder_name'..."
-        mkdir "../$folder_name"
+# Check if GEN directory is empty
+if [ -z "$(ls -A)" ]; then
+    echo "GEN directory is empty."
+    read -p "How many workareas would you like to create? " num_workareas
+    
+    # Validate input
+    if ! [[ "$num_workareas" =~ ^[0-9]+$ ]]; then
+        echo "Error: Please enter a valid number."
+        exit 1
     fi
 
-    # Copy file to corresponding folder with a fixed name
-    echo "Copying file '$file' to '../$folder_name/'..."
-    cp "$file" "../$folder_name/GEN.root"
+    # Create workareas
+    for i in $(seq 1 $num_workareas); do
+        folder_name="${DEFAULT_WORKAREA_NAME}_$i"
+        echo "Creating folder '../$folder_name'..."
+        mkdir -p "../$folder_name"
 
-    # Copy config folder contents to corresponding folder
-    echo "Copying config folder '$2' contents to '../$folder_name/'..."
-    cp -r "../../$CONFIG_BASE_PATH/$2/." "../$folder_name/"
-done
+        # Copy config folder contents to corresponding folder
+        echo "Copying config folder '$2' contents to '../$folder_name/'..."
+        cp -r "../../$CONFIG_BASE_PATH/$2/." "../$folder_name/"
+    done
+else
+    # Original logic for non-empty GEN directory
+    for file in *.root; do
+    # Get the file name without extension
+        folder_name="${file%.root}"
+
+        # Create folder at Y2S level if it doesn't exist
+        if [ ! -d "../$folder_name" ]; then
+            echo "Creating folder '../$folder_name'..."
+            mkdir "../$folder_name"
+        fi
+
+        # Copy file to corresponding folder
+        echo "Copying file '$file' to '../$folder_name/'..."
+        cp "$file" "../$folder_name/GEN.root"
+
+        # Copy config folder contents to corresponding folder
+        echo "Copying config folder '$2' contents to '../$folder_name/'..."
+        cp -r "../../$CONFIG_BASE_PATH/$2/." "../$folder_name/"
+    done
+fi
 
 echo "Folders setup completed successfully!"
