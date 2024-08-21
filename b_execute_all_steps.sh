@@ -33,6 +33,9 @@ execute_step() {
     # Find directories matching the pattern and store them in an array
     directories=($(find "$BASE_FOLDER" -type d -name "$SUB_FOLDER_PATTERN*"))
 
+    # skip the first n directories
+    # directories=("${directories[@]:8}")
+
     local folder_count=${#directories[@]}
     echo "Number of folders found: $folder_count"
 
@@ -41,6 +44,11 @@ execute_step() {
         echo "No folders found matching the pattern '$SUB_FOLDER_PATTERN*' in '$BASE_FOLDER'. Exiting..."
         exit 1
     fi
+
+    # print the directories
+    for directory in "${directories[@]}"; do
+        echo "$directory"
+    done
 
     echo "Starting to run $step..."  # Indicate that the script is starting to run the specified step
 
