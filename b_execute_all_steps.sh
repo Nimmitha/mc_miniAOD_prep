@@ -33,8 +33,8 @@ execute_step() {
     # Find directories matching the pattern and store them in an array
     directories=($(find "$BASE_FOLDER" -type d -name "$SUB_FOLDER_PATTERN*"))
 
-    # skip the first n directories
-    # directories=("${directories[@]:8}")
+    # only pick directories that end with given number/s
+    # directories=($(for i in ${directories[@]}; do if [[ $i =~ [7]$ ]]; then echo $i; fi; done)) # Ex: [589]
 
     local folder_count=${#directories[@]}
     echo "Number of folders found: $folder_count"
