@@ -19,7 +19,7 @@ execute_step() {
 
     # Pick the CMSSW version based on the step
     if [ "$step" == "HLT" ]; then
-        local cmssw_version="CMSSW_10_2_16_UL"
+        local cmssw_version="CMSSW_10_2_16_UL" # HLT step requires this version for 2018
     else
         local cmssw_version="CMSSW_10_6_20"
     fi
@@ -100,8 +100,8 @@ fi
 BASE_FOLDER="$1"
 SUB_FOLDER_PATTERN="$2"
 
-execute_step "SIM"
-execute_step "DIGI"
+# execute_step "SIM"
+# execute_step "DIGI"
 execute_step "HLT"
 execute_step "RECO"
 execute_step "MiniAOD"
